@@ -1,0 +1,67 @@
+---
+title: "Instruction_List"
+author: "Chocka Sivakumar"
+date: "October 25, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Instruction List
+
+A step-by-step recipe of every action performed, to fulfil the objectives of the project, is recorded here: \
+
+ 
+ 1. Unzipping the project file: \
+`unzip("getdata%2Fprojectfiles%2FUCI HAR Dataset.zip")`
+
+ 2. Creating data frames of relevant training and test sets. \
+`x_train <- read.table("./UCI HAR Dataset/train/X_train.txt")` \
+`x_test <- read.table("./UCI HAR Dataset/test/X_test.txt")` \
+`y_train <- read.table("./UCI HAR Dataset/train/y_train.txt")` \
+`y_test <- read.table("./UCI HAR Dataset/test/y_test.txt")` \
+`sub_train <- read.table("./UCI HAR Dataset/train/subject_train.txt")` \
+`sub_test <- read.table("./UCI HAR Dataset/test/subject_test.txt")`
+
+ 3. Transform sub_train and sub_test data.frame columns class to "factor". This is useful, as we to group the dataset based on the subject Id for creating the second tidy data set.\
+`sub_train <- transform(sub_train, V1 = as.factor(V1))` \
+`sub_test <- transform(sub_test, V1 = as.factor(V1))`
+
+ 4. Transform y_train and y_test data.frame columns class to "character". This is done to serve two purposes. One is to group the dataset based on the Y_labels, but more importantly, to map the values of labels to activity names. \
+`y_train <- transform(y_train, V1 = as.character(V1))`
+`y_test <- transform(y_test, V1 = as.character(V1))`
+ 
+ 5. Mergeing the measurements of training and the test sets to create one data set. \
+`x_merge <- rbind(x_train, x_test)`
+
+ 6. Creating features data frame. \
+`features <- read.table("./UCI HAR Dataset/features.txt")`
+
+ 7. Adding feature names as heading to the merged dataframe, x_merge. \
+`names(x_merge) <- features[,2]`
+
+ 8. Extracting only the measurements on the mean and standard deviation for each measurement. \
+`x_merge_mean_std <- x_merge[,(grepl("mean()", names(x_merge), fixed = TRUE) | grepl("std()", names(x_merge), fixed = TRUE))]`
+
+ 9. Creating SubjectId and Activity dataframes by merging respective training and test data. \
+`sub_merge <- rbind(sub_train, sub_test)` \
+`y_merge <- rbind(y_train, y_test)` \
+`names(sub_merge) <- "SubjectId"` \
+`names(y_merge) <- "Activity"`
+
+ 10. Combining SubjectId, x_merge_mean_std, and Activity using cbind. \
+`mer_data <- cbind(sub_merge, x_merge_mean_std, y_merge)` 
+ 
+ 11. Using descriptive activity names to name the activities in the data set. \
+`mer_data$Activity <- mapvalues(mer_data$Activity, from = c("1", "2", "3", "4", "5", "6"), to = c("WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS", "SITTING", "STANDING", "LAYING"))`
+
+ 12. Write the first dataset to a .txt file \
+`write.table(mer_data, "tidy_data_1.txt", row.name=FALSE)` 
+
+ 13. From the data set in step 12, creates a second, independent tidy data set with the average of each variable for each activity and each subject. \
+`average_by_act_sub <- ddply(mer_data, .(Activity, SubjectId), function(x) colMeans(x[, 2:67]))`
+
+ 14. Write the second dataset to a second .txt file. \
+`write.table(average_by_act_sub, "tidy_data_2.txt", row.name=FALSE)`
