@@ -25,10 +25,10 @@ To create one R script called run_analysis.R that does the following.
 
 # Files included in the Github repo
 
-run_analysis.R - The R script that performs the objectives of the project and creates two tidy datasets. 
-Instruction_list.Rmd - The step-by-step recipe that explains the workflow.
-Codebook_data1.md - Codebook that provides information about the variables, summary choices, and study design for dataset1.
-Codebook_data2.md - Codebook for dataset2.
-Colnames_data1.txt - Column names of all the columns in dataset1, including the SubjectId, features, and Activity. 
-tidy_data1.txt - The first tidy data that is expected from the project objective.
-tidy_data2.txt - The second tidy data that is expected from the project objective.
+* run_analysis.R - The R script that performs the objectives of the project and creates two tidy datasets. 
+* Instruction_list.Rmd - The step-by-step recipe that explains the workflow.
+* Codebook_data1.md - Codebook that provides information about the variables, summary choices, and study design for dataset1.
+* Codebook_data2.md - Codebook for dataset2.
+* Colnames_data1.txt - Column names of all the columns in dataset1, including the SubjectId, features, and Activity. 
+* tidy_data1.txt - The first tidy data that is expected from the project objective.
+* tidy_data2.txt - The second tidy data that is expected from the project objective.
